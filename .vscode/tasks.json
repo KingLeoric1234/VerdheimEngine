@@ -5,7 +5,7 @@
             "label": "build engine",
             "type": "shell",
             "command": "gcc",
-            "args": ["src/main.c", "-o", "engine.exe", "-Wall"],
+            "args": ["Engine/main.c", "-o", "engine.exe", "-Wall"],
             "group": { "kind": "build", "isDefault": true },
             "problemMatcher": ["$gcc"]
         }

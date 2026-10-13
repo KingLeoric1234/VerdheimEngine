@@ -1,0 +1,7 @@
+# Build output
+engine.exe
+*.o
+
+# VS Code personal settings (keep tasks.json tracked)
+.vscode/settings.json
+.vscode/launch.json

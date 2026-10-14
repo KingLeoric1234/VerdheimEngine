@@ -5,7 +5,13 @@
             "label": "build engine",
             "type": "shell",
             "command": "gcc",
-            "args": ["Engine/main.c", "-o", "engine.exe", "-Wall"],
+            "args": [
+                "Engine/EntryPoint/EntryPoint.c",
+                "Engine/FrameUpdate/FrameUpdate.c",
+                "Engine/InitializeCheck/InitializeCheck.c",
+                "-o", "engine.exe",
+                "-Wall"
+            ],
             "group": { "kind": "build", "isDefault": true },
             "problemMatcher": ["$gcc"]
         }

@@ -2,10 +2,10 @@
 #include <math.h>
 
 // Define the vector in the world to facilitate the calculating.
-struct Vec3
+typedef struct Vec3
 {
     float x, y, z;
-};
+} Vec3;
 
 // Define the distance in the world.
 float euclidean_distance(struct Vec3 a, struct Vec3 b)

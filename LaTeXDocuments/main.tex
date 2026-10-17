@@ -1,0 +1,27 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+% ---- 常用包（按需保留） ----
+\usepackage{amsmath, amssymb}   % 数学
+\usepackage{graphicx}            % 插图
+\usepackage{booktabs}            % 表格
+\usepackage{hyperref}            % 链接
+\hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue}
+\title{Game Design Documentation}
+
+\begin{document}
+	\maketitle
+	
+	\newpage
+	\begin{center}
+		\textbf{Part 1: Engine}
+	\end{center}
+	\input{EngineDesign/EngineEntryPoint}
+	\input{EngineDesign/Engine_Initialization}
+	\input{EngineDesign/render}
+	\input{EngineDesign/Details}
+\end{document}

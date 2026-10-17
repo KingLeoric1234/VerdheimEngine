@@ -4,9 +4,9 @@
 #include "..\3DSpaceDefinition\Space.h"
 
 // Define a sprite with position, scales, image_paths.
-struct Sprite
+typedef struct Sprite
 {
-    struct Vec3 position;  // position.
+    Vec3 position;         // position.
     int width, height;     // scales.
     unsigned char *pixels; // image_paths. Point the resources path.
-};
+} Sprite;

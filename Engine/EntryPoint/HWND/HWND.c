@@ -38,7 +38,7 @@ HWND RegisterWindow(HINSTANCE hInstance, int nCmdShow)
     wc.cbSize = sizeof(WNDCLASSEXW);
     wc.lpfnWndProc = WndProc;
     wc.hInstance = hInstance;
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW); // Default arrow.
+    wc.hCursor = LoadCursor(NULL, IDC_ARROW); // Default console arrow.
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wc.lpszClassName = CLASS_NAME;
 

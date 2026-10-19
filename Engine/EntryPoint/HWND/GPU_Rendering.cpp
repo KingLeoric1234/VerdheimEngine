@@ -32,7 +32,7 @@ extern "C" int render_init(void *hwnd)
     // Package which window fits and the scales of the graphic.
     D2D1_HWND_RENDER_TARGET_PROPERTIES hwnd_props =
         D2D1::HwndRenderTargetProperties((HWND)hwnd,
-            D2D1::SizeU((UINT32)surface.width, (UINT32)surface.height));
+                                         D2D1::SizeU((UINT32)surface.width, (UINT32)surface.height));
 
     // Check out whether the graphic renderer completed.
     hr = g_factory->CreateHwndRenderTarget(

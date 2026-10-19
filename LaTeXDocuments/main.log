@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.8.4)  17 OCT 2026 16:29
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.8.4)  19 OCT 2026 14:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -508,16 +508,23 @@ LaTeX Warning: No \author given.
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
-Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 89F1581DAB05362D7C863B6DF6A5DA2F;576.
+
+
+Package rerunfilecheck Warning: File `main.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `main.out':
+(rerunfilecheck)             Before: 89F1581DAB05362D7C863B6DF6A5DA2F;576
+(rerunfilecheck)             After:  BC876BBDFDAE361E9ED6443CF17E12A0;706.
  ) 
 Here is how much of TeX's memory you used:
  11313 strings out of 473832
  175210 string characters out of 5733159
- 581733 words of memory out of 5000000
+ 582733 words of memory out of 5000000
  34221 multiletter control sequences out of 15000+600000
  592459 words of font info for 61 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 72i,6n,79p,290b,341s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,6n,79p,290b,343s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on main.pdf (2 pages).

@@ -25,24 +25,30 @@ Vec3 transform_movement(Sprite sprite, float speed, Vec3 dvector) // "dvector": 
 }
 
 // The coordinate changing follows differential equation, simulating the actual movement.
-Vec3 simulate_movement(Sprite sprite, Vec3 input, float acceleration, float deceleration, float dt)
+Vec3 simulate_movement(Sprite sprite, float Force, float Mass, float k, float dt, Vec3 dvector, float *velocity, float origin_velocity)
 {
-    Vec3 sprite_position;
-    sprite_position = sprite.position;
-    float frame_rendering_time_ms_float = 1.0f / *p_frame; // (s/ms). We get the 0.005ms/frame.
+    // Prevent origin_velocity, velocity, director vector is NULL.
+    if (!origin_velocity)
+        origin_velocity = 0;
 
-    // Check the acceleration and deceleration, facilitates to add the acceleration and deceleration.
-    if (!deceleration)
-        deceleration = acceleration;
-    else if (!acceleration)
-        acceleration = deceleration;
-    else
-        acceleration = deceleration = 0;
+    if (!dvector.x && !dvector.y && !dvector.z)
+    {
+        dvector.x = 0;
+        dvector.y = 0;
+        dvector.z = 0;
+    }
 
-    // Acceleration. "dt" = frame_rendering_time_ms_float.
-    sprite.position.x += input.x * acceleration * dt;
-    sprite.position.y += input.y * acceleration * dt;
-    sprite.position.z += input.z * acceleration * dt;
+    if (!velocity)
+        velocity = 0;
+
+    if (!sprite.pixels && !Force && !Mass && !k && !dt)
+    {
+        Vec3 zero = {0, 0, 0};
+        return zero; // Preventing to execute the code behind.
+    }
+
+    // TODO: This will write the frame counter and link the keycode press detecter.
+    // The frame counter must link the keycode press detecter that works.
 }
 
 Vec3 Normalize(Vec3 dvector) // Normalize the direction vector.

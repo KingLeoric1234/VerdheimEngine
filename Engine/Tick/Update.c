@@ -13,6 +13,10 @@ int down_the_frame(int *p_frame)
     *p_frame -= 10; // Decrease 10 frames.
 }
 
+// Frame Initialization.
+int frame = 200;       // Define the frame's refreshment.
+int *p_frame = &frame; // Get the location of the "int frame".
+
 void Update(bool Program_State)
 {
     // Initialize the BMP tile.
@@ -21,9 +25,6 @@ void Update(bool Program_State)
     tile.position.x = 200;
     tile.position.y = 200;
 
-    // Frame Initialization.
-    int frame = 200;       // Define the frame's refreshment.
-    int *p_frame = &frame; // Get the location of the "int frame".
     float frame_rendering_time_ms_float = 1000.0f / *p_frame;
 
     if (Program_State) // If programe running, then loop the frame.

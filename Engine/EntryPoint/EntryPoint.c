@@ -4,7 +4,7 @@
 #include "HWND\HWND_Proxy.h"                    // Seperate the system's API to core programme, faciliating transplant.
 #include "..\InitializeCheck\InitializeCheck.h" // Allocate memories.
 #include "HWND\HWND.h"                          // Handle the Window.
-#include "HWND\GPU_Rendering.h"              // Rendering Pipeline.
+#include "HWND\GPU_Rendering.h"                 // Rendering Pipeline.
 
 // Engine on/off switch: when false, the engine stays shut down and skips the loop.
 bool programme_execution = true;
@@ -32,6 +32,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     platform_set_window(hwnd); // Let the Proxy know what the main window is. Filename: "HWND_Proxy.h".
 
+    render_init((HWND)hwnd); // Initialize the hwnd rendering programme.
+
     FrameLoop(); // Loop the window, the WinProc get the message and send it to sprite loop (Game sprite loop).
+
+    render_shutdown(); // Release the D2D resources and memories.
+
     return 0;
 }

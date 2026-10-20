@@ -11,6 +11,9 @@
 unsigned char *sprite_memory = NULL;
 unsigned char *screen_memory = NULL;
 
+// Memory cursor: records how much sprite_memory has been used.
+int sprite_memory_offset = 0;
+
 // Engine init tag: if the engine is not initialized, raise an error and refuse to run.
 bool engine_initialization = false;
 void reallocate_memory(void); // forward declaration: retry allocation after a short wait.
@@ -19,8 +22,8 @@ void reallocate_memory(void); // forward declaration: retry allocation after a s
 bool allocate_memory(void)
 {
     // Step 1: allocate RAM for engine data (not disk storage).
-    sprite_memory = malloc(INITIALIZE_MEMORY_SIZE); // Allocate space for engine_memory.
-    screen_memory = malloc(INITIALIZE_MEMORY_SIZE); // Allocate the same memory size for screen display.
+    sprite_memory = (unsigned char *)malloc(INITIALIZE_MEMORY_SIZE); // Allocate space for engine_memory.
+    screen_memory = (unsigned char *)malloc(INITIALIZE_MEMORY_SIZE); // Allocate the same memory size for screen display.
 
     if (sprite_memory == NULL || screen_memory == NULL)
     {
@@ -36,9 +39,9 @@ bool allocate_memory(void)
 // Reallocate the memories when allocate memory failed.
 void reallocate_memory()
 {
-    Sleep(15000);                                   // sleep for 15s wait for system recovering.
-    screen_memory = malloc(INITIALIZE_MEMORY_SIZE); // reallocate memories.
-    sprite_memory = malloc(INITIALIZE_MEMORY_SIZE);
+    Sleep(15000);                                                    // sleep for 15s wait for system recovering.
+    screen_memory = (unsigned char *)malloc(INITIALIZE_MEMORY_SIZE); // reallocate memories.
+    sprite_memory = (unsigned char *)malloc(INITIALIZE_MEMORY_SIZE);
 }
 
 // Set a pointer to the resource disk so that finding resources quickly.
@@ -69,4 +72,23 @@ void free_memories()
 bool memory_check(int offset, int size)
 {
     return offset + size <= INITIALIZE_MEMORY_SIZE;
+}
+
+// Allocate memory from sprite_memory (the big block).
+// Returns a pointer to the allocated space, or NULL if out of memory.
+void *sprite_memory_alloc(int size)
+{
+    // Check if we have enough space.
+    if (!memory_check(sprite_memory_offset, size))
+    {
+        return NULL; // Out of memory.
+    }
+
+    // Get the pointer to the current cursor position.
+    void *ptr = sprite_memory + sprite_memory_offset;
+
+    // Move the cursor forward.
+    sprite_memory_offset += size;
+
+    return ptr;
 }

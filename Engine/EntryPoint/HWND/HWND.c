@@ -1,5 +1,6 @@
 #include <windows.h>
 #include "HWND.h"
+#include "..\..\Tick\Update.h"
 
 static MSG msg;
 
@@ -85,5 +86,8 @@ void FrameLoop(void)
             TranslateMessage(&msg); // Translate the message into WN_CHAR.
             DispatchMessageW(&msg); // Send to the WndProc.
         }
+        // Our codes here:
+        Update(running);
+        // Our update codes above!
     }
 }

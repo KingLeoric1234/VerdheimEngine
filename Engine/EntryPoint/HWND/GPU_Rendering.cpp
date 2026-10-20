@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <vector>
 #include <cstdint>
 #include <d2d1.h>                                  // Direct2D.
@@ -9,6 +10,60 @@
 #include "..\..\InitializeCheck\InitializeCheck.h" // Needs to use RESOURCE_PATH #define.
 #include "HWND_Proxy.h"                            // Needs window scales (RSface) to render.
 
+// Function: Load the BMP file into the "Sprite".
+// Return 0 == succeed, 1 == failed.
+extern "C" int load_bmp_to_sprite(const char *filepath, Sprite *out)
+{
+    // Read the file in binary. filepath == sprite path.
+    FILE *f = fopen(filepath, "rb");
+    if (!f)
+        return -1;
+
+    // Read the file's header.
+    BITMAPFILEHEADER fh;
+    fread(&fh, sizeof(fh), 1, f);
+    if (fh.bfType != 0x4D42)
+    {
+        fclose(f);
+        return -1;
+    } // If not BMP, then return 0 to report the file frame error.
+
+    // Read the file's header.
+    BITMAPINFOHEADER ih;
+    fread(&ih, sizeof(ih), 1, f);
+
+    // Jumop to the pixels location and read them.
+    fseek(f, fh.bfOffBits, SEEK_SET);
+
+    // Allocate memories for BMP image from the big memory pool.
+    int w = ih.biWidth;
+    int h = ih.biHeight;
+    out->width = w;
+    out->height = h;
+
+    // Allocate memorys for image in the allocated memories in the initialization range.
+    out->pixels = (unsigned char *)sprite_memory_alloc(w * h * 3);
+    if (out->pixels == NULL)
+    {
+        fclose(f);
+        return -1; // Out of memory.
+    }
+
+    // Read the pixels's data.
+    unsigned char *row = (unsigned char *)malloc(w * 3);
+    for (int y = h - 1; y >= 0; y--)
+    {
+        fread(row, w * 3, 1, f);
+        memcpy(out->pixels + y * w * 3, row, w * 3);
+    }
+    free(row);
+    fclose(f);
+
+    return 0;
+}
+//////////////////////////////
+
+// Intelligent Pointer.
 using Microsoft::WRL::ComPtr;
 
 // Global Intelligent Pointer.

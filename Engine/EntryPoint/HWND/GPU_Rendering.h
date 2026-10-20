@@ -13,7 +13,7 @@ extern "C"
     void render_draw(const Sprite *s); // Draw sprites on canvas. (Rasterizer + Colour + Mix)
     void render_end(void);             // EndDraw + Present onto the screen.
     void render_shutdown(void);        // Release the canvas.
-
+    int load_bmp_to_sprite(const char *filepath, Sprite *out); // Load BMP file into Sprite.
 #ifdef __cplusplus
 }
 #endif

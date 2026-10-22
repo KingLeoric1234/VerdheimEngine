@@ -1,8 +1,11 @@
 #include <windows.h>
 #include "HWND.h"
 #include "..\..\Tick\Update.h"
+#include "KeyCode_Presser.h"
 
 static MSG msg;
+int frame_counter;                       //  Record the frames passing.
+int *frame_counter_ptr = &frame_counter; //  Record the frames passing pointer, facilitates to change the frame counter and record the time.
 
 static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) // Define the event function.
 {
@@ -15,6 +18,7 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     case WM_KEYDOWN:
         if (wParam == VK_ESCAPE)
             DestroyWindow(hwnd);
+
         return 0;
 
     case WM_PAINT:
@@ -72,7 +76,7 @@ HWND RegisterWindow(HINSTANCE hInstance, int nCmdShow)
 
 void FrameLoop(void)
 {
-    BOOL running = TRUE;
+    BOOL running = TRUE; //  Record the program running state, if running, running == True.
 
     while (running) // When running, display the window and begin the frame.
     {
@@ -87,7 +91,11 @@ void FrameLoop(void)
             DispatchMessageW(&msg); // Send to the WndProc.
         }
         // Our codes here:
-        Update(running);
+        if (running)
+        {
+            Update(running);
+            *frame_counter_ptr += 1; //  Record the frame counter, facilitates to record the frames and time.
+        }
         // Our update codes above!
     }
 }

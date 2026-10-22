@@ -17,7 +17,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     {
         allocate_memory(); // Allocate memorys for sprites and screen.
 
-        initialize_resource_memory(); // Initialize the resources path for engine, facilitate to find.
+        initialize_resource_memory(); // Initialize the resources path for engine, facilitates to find.
 
         mark_initialization_complete(); // If initialization succeed, then mark the "True" for next step.
     }
@@ -30,13 +30,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         return 1; // The programme runs into error.
     }
 
-    platform_set_window(hwnd); // Let the Proxy know what the main window is. Filename: "HWND_Proxy.h".
+    platform_set_window(hwnd); // Let the Proxy know what the main window is. Filename: "HWND_Proxy.h". The proxy facilitates to transplant the engine and the game.
 
     render_init((HWND)hwnd); // Initialize the hwnd rendering programme.
 
     FrameLoop(); // Loop the window, the WinProc get the message and send it to sprite loop (Game sprite loop).
 
     render_shutdown(); // Release the D2D resources and memories.
+
+    free_memories(); // Free all memmories that registered.
 
     return 0;
 }

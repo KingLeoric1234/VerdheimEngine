@@ -3,6 +3,7 @@
 #include <windows.h>
 #include "..\EntryPoint\HWND\GPU_Rendering.h" // We need the rendering steps.
 #include "..\Render\SpriteDefinition.h"       // We need the Sprite variation
+#include "UpdateThings.h"                     // The rendering code here.
 
 // Extern the load bmp function into the file.
 extern int load_bmp_to_sprite(const char *filepath, Sprite *out);
@@ -17,14 +18,8 @@ int down_the_frame(int *p_frame)
 int frame = 200;       // Define the frame's refreshment.
 int *p_frame = &frame; // Get the location of the "int frame".
 
-void Update(bool Program_State)
+void Update(bool Program_State) // The Program_State will be filled by HWND.c, argument: BOOL running = TRUE; (Windows API).
 {
-    // Initialize the BMP tile.
-    static Sprite tile;
-    load_bmp_to_sprite("Resources/tile_0001.bmp", &tile);
-    tile.position.x = 200;
-    tile.position.y = 200;
-
     float frame_rendering_time_ms_float = 1000.0f / *p_frame;
 
     if (Program_State) // If programe running, then loop the frame.
@@ -36,9 +31,9 @@ void Update(bool Program_State)
         QueryPerformanceFrequency(&freq); // Record the tick.
         QueryPerformanceCounter(&t0);     // Record the begin time.
 
-        // Begin to render, File: GPU_Rendering.
+        // Begin to render, File: GPU_Rendering.c.
         render_begin();
-        render_draw(&tile);
+        UpdateThings();
         render_end();
 
         QueryPerformanceCounter(&t1); // Record the rendering end time.

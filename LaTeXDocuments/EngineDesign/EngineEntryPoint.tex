@@ -1,7 +1,49 @@
-\section{Engine entry point}
+\section{Engine entry point: The life cycle of the game.}
 
-\begin{enumerate}
-	\item Initialize the engine.
-	\item Create Win32 Window
-	\item Loop the window.
+\subsection{Entry Point. File: EntryPoint.c}
+\begin{enumerate}[label = Step\arabic*]
+	\item	Program execution: Player click the game and execute it.
+	\item	Allocate memories for every units: Sprites, Renderer.
+	\item	Register Windows.
+	\item 	Initialize rendering program.
+	\item 	\textbf{Begin the windows loop.} (The core of gaming loops. More details, see \ref{FrameLoop}).
+	\item	rendering shutdown.
+	\item	free\_memories.
 \end{enumerate}
+
+\subsection{Frame Loop. File: HWND.c}
+\begin{enumerate}[label = Step\arabic*]\label{FrameLoop}
+	\item 	Program state checking: If program running state is true, then begin the frame loop.
+	\item	Peek Message (Windows API): Detect whether player pressed the Key code, this API will help us to detect the key code instantly.
+	\item	\textbf{Update rendering:} when peek message finished, then execute the rendering update. Draw the current prepared frame. More details, see \ref{Update}.
+	\item   Time counter: We use frame to define the game's minimum time. The time counter defined in the Timer.c file.
+	\item   Back to the Step 1. Check whether the program running, if running, then prepare for the next Peek Message and new frame drawing. If not, then shut down the frame.
+\end{enumerate}
+
+\subsection{Update: Flow Chart.}
+
+\begin{tikzpicture}[
+	node distance=1.2cm and 2cm,   % horizontal/vertical spacing
+	every node/.style={font=\small},
+	startstop/.style={rectangle, rounded corners=2mm, draw, minimum width=1.6cm, minimum height=0.8cm},
+	process/.style={rectangle, draw, text centered, minimum width=2.6cm},
+	decision/.style={diamond, draw, aspect=2, text centered, minimum width=1.8cm},
+	io/.style={trapezium, draw, trapezium left angle=70, trapezium right angle=110, text centered}
+	]
+	\node [startstop] (start) {Begin};
+	\node [io, below=of start] (in) {输入 n};
+	\node [process, below=of in] (init) {i = 1, sum = 0};
+	\node [decision, below=of init] (test) {i \(\le\) n ?};
+	\node [process, right=of test] (add) {sum = sum + i};
+	\node [process, below=of add] (inc) {i = i + 1};
+	\node [io, below=of test] (out) {输出 sum};
+	\node [startstop, below=of out] (end) {End};
+	\draw [-{Stealth}] (start) -- (in);
+	\draw [-{Stealth}] (in) -- (init);
+	\draw [-{Stealth}] (init) -- (test);
+	\draw [-{Stealth}] (test) -- node [above]{否} (out);
+	\draw [-{Stealth}] (out) -- (end);
+	\draw [-{Stealth}] (test) -- node [above]{是} (add);
+	\draw [-{Stealth}] (add) -- (inc);
+	\draw [-{Stealth}] (inc) -| (test);   % corner path back to the test
+\end{tikzpicture}

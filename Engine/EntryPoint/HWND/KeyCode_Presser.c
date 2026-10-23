@@ -1,58 +1,52 @@
 #include "KeyCode_Presser.h"
 #include <stdio.h>
 
-#define KEYDOWN 8 // Max key codes we record per frame.
+#define KEYDOWN 6 // Max key codes we record per frame.(0-5)
 
-static BYTE keyState[256];
-static BYTE pressedList[KEYDOWN];
+static BYTE keyState[256]; // Key pressed array
+static BYTE pressedArray[KEYDOWN];
 static int pressedCount;
+short array_length = 0; // initialize the array_length == 0. Simplify the calculation.
 
-void KeyCOde_Presser_OnKeyDown(BYTE vkey)
+// Define an array to store the key pressed data.
+BYTE insert_keyvalue(MSG msg)
 {
-    keyState[vkey] = 1;
-    if (pressedCount < KEYDOWN)
-        pressedList[pressedCount++] = vkey;
+    if (array_length >= KEYDOWN) // More than KEYDOWN calculator then return -1.
+        return 0;                // The array full.
+
+    for (short i = 0; i <= KEYDOWN; i++)
+    {
+        if (!pressedArray[i])
+            pressedArray[i] = msg.wParam; // insert the key_state.
+        array_length += 1;
+    }
+    return pressedArray[KEYDOWN];
 }
 
-void KeyCode_Presser_OnKeyUP(BYTE vkey)
+BYTE delete_keyvalue()
 {
-    keyState[vkey] = 0;
+    for (short i = 0; i <= KEYDOWN; i++)
+    {
+        if (pressedArray[i])
+        {
+            pressedArray[i] = NULL;
+        }
+    }
 }
 
-void KeyCode_Presser_FrameReset(void)
+void listen_keyvalue(MSG msg)
 {
-    pressedCount = 0;
+    if (msg.message == WM_KEYDOWN && msg.wParam)
+    {
+        insert_keyvalue(msg);
+    }
 }
 
-const BYTE *KeyCode_Presser_GetList(int *count)
+int search_keystates(BYTE target)
 {
-    *count = pressedCount;
-    return pressedList
-}
-
-// Pseudo code
-Begin : One frame.
-
-        void get_key_pressed[KEYDOWN]()
-{
-    add keyState[1];
-    add keyState[2];
-    ... add keyState[8];
-}
-
-void *get_key_pressed = &get_key_pressed;
-
-End One Frame.
-
-    void
-    get_key_released(void *get_key_pressed)
-{
-    *get_key_pressed[KEYDOWN] = 0; // Release the key code, prepare for next frame.
-}
-
-// Player:
-if get_key_pressed
-[KEYDOWN] exists keyState[1]
-{
-    execute some codes;
+    for (int i = 0; i < array_length; i++)
+    {
+        if (pressedArray[i] == target)
+            return 1; // We get the target and return 1 indicates that target in the array.
+    }
 }

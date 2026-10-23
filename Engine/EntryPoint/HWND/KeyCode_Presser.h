@@ -3,6 +3,9 @@
 
 #include <windows.h>
 
-void KeyCOde_Presser_OnKeyDown();
+BYTE insert_keyvalue(MSG msg);
+BYTE delete_keyvalue();
+void listen_keyvalue(MSG msg);
+int search_keystates(BYTE keystate[], BYTE target);
 
 #endif // KEYCODEPRESSER_H

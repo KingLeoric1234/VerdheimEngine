@@ -82,13 +82,14 @@ void FrameLoop(void)
     {
         while (PeekMessageW(&msg, NULL, 0, 0, PM_REMOVE))
         {
-            if (msg.message == WM_QUIT)
+            if (msg.message == WM_QUIT) // WM_QUIT == Quit the hwnd windows.
             {
                 running = FALSE; // Quit the frame and programme.
                 break;
             }
             TranslateMessage(&msg); // Translate the message into WN_CHAR.
             DispatchMessageW(&msg); // Send to the WndProc.
+            listen_keyvalue(msg);   // File: KeyCode_Presser.c, Listening the key values, record them into a array.
         }
         // Our codes here:
         if (running)
@@ -96,6 +97,7 @@ void FrameLoop(void)
             Update(running);
             *frame_counter_ptr += 1; //  Record the frame counter, facilitates to record the frames and time.
         }
+        delete_keyvalue(); // File: KeyCode_Presser.c, Clear all of the key values, prepare for the next listening.
         // Our update codes above!
     }
 }

@@ -27,7 +27,7 @@ Vec3 transform_movement(Sprite sprite, float speed, Vec3 dvector) // "dvector": 
 // The coordinate changing follows differential equation, simulating the actual movement.
 Vec3 simulate_movement(Sprite sprite, float Force, float Mass, float k, float dt, Vec3 dvector, float *velocity, float origin_velocity)
 {
-    // Prevent origin_velocity, velocity, director vector is NULL.
+    // Prevent origin_velocity, instant velocity, director vector is NULL.
     if (!origin_velocity)
         origin_velocity = 0;
 

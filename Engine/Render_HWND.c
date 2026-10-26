@@ -1,7 +1,5 @@
 #include <windows.h>
 #include "HWND.h"
-#include "..\..\Tick\Update.h"
-#include "KeyCode_Presser.h"
 
 static MSG msg;
 int frame_counter;                       //  Record the frames passing.
@@ -91,13 +89,5 @@ void FrameLoop(void)
             DispatchMessageW(&msg); // Send to the WndProc.
             listen_keyvalue(msg);   // File: KeyCode_Presser.c, Listening the key values, record them into a array.
         }
-        // Our codes here:
-        if (running)
-        {
-            Update(running);
-            *frame_counter_ptr += 1; //  Record the frame counter, facilitates to record the frames and time.
-        }
-        delete_keyvalue(); // File: KeyCode_Presser.c, Clear all of the key values, prepare for the next listening.
-        // Our update codes above!
     }
 }

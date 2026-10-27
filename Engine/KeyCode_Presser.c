@@ -1,5 +1,4 @@
 #include "KeyCode_Presser.h"
-#include <stdio.h>
 
 #define KEYDOWN 6 // Max key codes we record per frame.(0-5)
 

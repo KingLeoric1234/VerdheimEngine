@@ -4,28 +4,17 @@
 
 */
 
+#include "Render_CPU_Calculation.h"
+
 #define NULL 0x00
 #define MAX_NODES 10000
 #define PI 3.1415926
 
 /*
-    Variation:
-    The variation we will use.
+
+    This data structure is only-used in this file.
 
 */
-typedef struct Vec3
-{
-    float x;
-    float y;
-    float z;
-} Vec3;
-
-typedef struct Sprite
-{
-    unsigned char *location; // Sprite's location.
-    Vec3 position;
-} Sprite;
-
 typedef struct List_Node // World position
 {
     Sprite sprite;
@@ -77,7 +66,7 @@ static List_Node MapListPool[MAX_NODES];
 static List_Node *freeList = NULL;
 List_Node BeginNode, EndNode;
 
-void init_list()
+static void init_list()
 {
     for (int i = 0; i < MAX_NODES; i++)
     {
@@ -88,7 +77,7 @@ void init_list()
     EndNode.next = NULL;
 }
 
-List_Node *node_new(void) // Get a new Node.
+static List_Node *node_new(void) // Get a new Node.
 {
     if (freeList == NULL)
         return NULL; // The node empty.
@@ -97,7 +86,7 @@ List_Node *node_new(void) // Get a new Node.
     return n;
 }
 
-void insert_the_node(List_Node *added_node)
+static void insert_the_node(List_Node *added_node)
 {
     List_Node *n = node_new();
     if (n == NULL)
@@ -106,14 +95,14 @@ void insert_the_node(List_Node *added_node)
     added_node->next = n;
 }
 
-void fill_the_node(List_Node *node, Sprite callsprite)
+static void fill_the_node(List_Node *node, Sprite callsprite)
 {
     node->sprite = callsprite;
     node->next = NULL;
 }
 
 // TODO: Design the map's list and read the map.
-void delete_the_node(List_Node *node)
+static void delete_the_node(List_Node *node)
 {
     // Step 1: Found the previous node.
     List_Node **pp = &BeginNode.next;  // Traverse from the first one.
@@ -144,6 +133,7 @@ float sine(float angle)
     else if (angle <= -180)
         angle += 360;
     float Triangle_angle = (angle / 180) * PI;
+
     // Taylor expansion.
     float T3 = Triangle_angle * Triangle_angle * Triangle_angle;
     float T5 = Triangle_angle * Triangle_angle * Triangle_angle * Triangle_angle * Triangle_angle;
@@ -182,10 +172,10 @@ float Tangent(float angle)
 
 */
 
-Vec3 Init_World_Coordinate;
-Vec3 *World_Coordinate_ptr = &Init_World_Coordinate;
+static Vec3 Init_World_Coordinate;
+static Vec3 *World_Coordinate_ptr = &Init_World_Coordinate;
 
-Vec3 init_world_coordinate(Vec3 *World_Coordinate)
+static Vec3 init_world_coordinate(Vec3 *World_Coordinate)
 {
     World_Coordinate->x = 0;
     World_Coordinate->y = 0;
@@ -207,10 +197,10 @@ Vec3 init_world_coordinate(Vec3 *World_Coordinate)
 
 */
 
-Vec3 Main_Camera_World_Coordinate;
-Vec3 *Main_Camera_World_ptr = &Main_Camera_World_Coordinate;
+static Vec3 Main_Camera_World_Coordinate;
+static Vec3 *Main_Camera_World_ptr = &Main_Camera_World_Coordinate;
 
-Vec3 init_camera_world_coordinate(Vec3 *Camera_Coordinate)
+static Vec3 init_camera_world_coordinate(Vec3 *Camera_Coordinate)
 {
     Camera_Coordinate->x = 0;
     Camera_Coordinate->y = 0;
@@ -218,6 +208,7 @@ Vec3 init_camera_world_coordinate(Vec3 *Camera_Coordinate)
 }
 
 /*
+
     Camera:
     Camera Active Axis.
 
@@ -226,17 +217,17 @@ Vec3 init_camera_world_coordinate(Vec3 *Camera_Coordinate)
 
 */
 
-Vec3 Main_Camera_Active_Axis;
-Vec3 *Main_Camera_Active_Axis_ptr = &Main_Camera_Active_Axis;
+static Vec3 Main_Camera_Active_Axis;
+static Vec3 *Main_Camera_Active_Axis_ptr = &Main_Camera_Active_Axis;
 
-Vec3 Init_Camera_Active_Axis(Vec3 *Direction_Coordinate)
+static Vec3 Init_Camera_Active_Axis(Vec3 *Direction_Coordinate)
 {
     Direction_Coordinate->x = Main_Camera_World_Coordinate.x;
     Direction_Coordinate->y = Main_Camera_World_Coordinate.y;
     Direction_Coordinate->z = Main_Camera_World_Coordinate.z;
 }
 
-Vec3 Main_Camera_Active_Axis_Rotation(float UD_angle, float LR_angle) // Up Down angle, Left Right angle.
+static Vec3 Main_Camera_Active_Axis_Rotation(float UD_angle, float LR_angle) // Up Down angle, Left Right angle.
 {
     // Coordinates: upper(u), right(r), front(f).
     // phi: Up Down angle, theta: Left Right angle.

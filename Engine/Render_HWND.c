@@ -1,3 +1,9 @@
+/*
+
+    Windows Handle.
+
+*/
+
 #include <windows.h>
 #include "HWND.h"
 

@@ -25,7 +25,7 @@ static Triangle Projection(
     Triangle Origin_triangle,
     int focus)
 {
-    // Origin Triangle.
+    // Origin Triangle, and Pointer.
     Triangle Projection_Triangle;
     Triangle *PTriPtr = &Projection_Triangle;
 

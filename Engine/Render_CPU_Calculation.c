@@ -272,15 +272,15 @@ Vec3 Camera_Output[2];
 Vec3 *Camera_Output_ptr = Camera_Output;
 
 void pack_camera_output(
-    Vec3 *Camera_output,         // Camera's output. (GPU read)
-    Vec3 Main_Camera_WCordinate, // Camera's World Coordinate.
-    Vec3 Main_Camera_AAxis       // Camera's Active Axis.
+    Vec3 *Camera_output,          // Camera's output. (GPU read)
+    Vec3 Main_Camera_WCoordinate, // Camera's World Coordinate.
+    Vec3 Main_Camera_AAxis        // Camera's Active Axis.
 )
 {
     // Line 1: Camera's World Coordinate.
-    Camera_output[0].x = Main_Camera_WCordinate.x;
-    Camera_output[0].y = Main_Camera_WCordinate.y;
-    Camera_output[0].z = Main_Camera_WCordinate.z;
+    Camera_output[0].x = Main_Camera_WCoordinate.x;
+    Camera_output[0].y = Main_Camera_WCoordinate.y;
+    Camera_output[0].z = Main_Camera_WCoordinate.z;
 
     // Line 2: Camera's Active Axis.
     Camera_output[1].x = Main_Camera_AAxis.x;

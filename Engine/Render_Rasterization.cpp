@@ -118,4 +118,3 @@ PAElement create_new_node(
     current_element_ptr->v = Current_v;
     return current_element;
 }
-// Create new nodes when array filled.

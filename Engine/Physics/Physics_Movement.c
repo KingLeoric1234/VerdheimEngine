@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <math.h>
-#include "..\Render\SpriteDefinition.h"
-#include "..\Tick\Update.h"
+#include "..\Shader\Render_CPU_Calculation.c"
 
 Vec3 Normalize(Vec3 dvector); // Declearify the Normalize function facilitate to use it.
 

@@ -7,19 +7,7 @@
 #include "Render_CPU_Calculation.h"
 
 #define NULL 0x00
-#define MAX_NODES 10000
 #define PI 3.1415926
-
-/*
-
-    This data structure is only-used in this file.
-
-*/
-typedef struct List_Node // World position
-{
-    Sprite sprite;
-    struct List_Node *next;
-} List_Node;
 
 /*
 
@@ -171,11 +159,7 @@ float Tangent(float angle)
     The world coordinate is the origin of the world, and the camera's position is relative to the world coordinate.
 
 */
-
-static Vec3 Init_World_Coordinate;
-static Vec3 *World_Coordinate_ptr = &Init_World_Coordinate;
-
-static Vec3 init_world_coordinate(Vec3 *World_Coordinate)
+Vec3 init_world_coordinate(Vec3 *World_Coordinate)
 {
     World_Coordinate->x = 0;
     World_Coordinate->y = 0;
@@ -196,17 +180,13 @@ static Vec3 init_world_coordinate(Vec3 *World_Coordinate)
     This is an Actual coordinate: ralate to the world coordinate. Facilitates the distance calculation between the camera and the sprite.
 
 */
-
-static Vec3 Main_Camera_World_Coordinate;
-static Vec3 *Main_Camera_World_ptr = &Main_Camera_World_Coordinate;
-
-static Vec3 init_camera_world_coordinate(Vec3 *Camera_Coordinate)
+Vec3 *init_camera_world_coordinate(Vec3 *Camera_Coordinate)
 {
     Camera_Coordinate->x = 0;
     Camera_Coordinate->y = 0;
     Camera_Coordinate->z = 0;
+    return Camera_Coordinate;
 }
-
 /*
 
     Camera:
@@ -216,18 +196,15 @@ static Vec3 init_camera_world_coordinate(Vec3 *Camera_Coordinate)
     The camera's active axis is determined by the camera's rotation.
 
 */
-
-static Vec3 Main_Camera_Active_Axis;
-static Vec3 *Main_Camera_Active_Axis_ptr = &Main_Camera_Active_Axis;
-
-static Vec3 Init_Camera_Active_Axis(Vec3 *Direction_Coordinate)
+Vec3 *Init_Camera_Active_Axis(Vec3 *Direction_Coordinate)
 {
-    Direction_Coordinate->x = Main_Camera_World_Coordinate.x;
-    Direction_Coordinate->y = Main_Camera_World_Coordinate.y;
-    Direction_Coordinate->z = Main_Camera_World_Coordinate.z;
+    Direction_Coordinate->x = 0;
+    Direction_Coordinate->y = 1;
+    Direction_Coordinate->z = 0;
+    return Direction_Coordinate;
 }
 
-static Vec3 Main_Camera_Active_Axis_Rotation(float UD_angle, float LR_angle) // Up Down angle, Left Right angle.
+Vec3 Main_Camera_Active_Axis_Rotation(float UD_angle, float LR_angle) // Up Down angle, Left Right angle.
 {
     // Coordinates: upper(u), right(r), front(f).
     // phi: Up Down angle, theta: Left Right angle.

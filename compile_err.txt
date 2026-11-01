@@ -1,0 +1,9 @@
+﻿g++ : C:/Users/Terry/AppData/Local/Microsoft/WinGet/Packages/BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8
+wekyb3d8bbwe/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: .rsrc merge fa
+ilure: multiple non-default manifests
+所在位置 行:1 字符: 160
++ ... ; exit 1 }; g++ -Wall -mwindows -municode -I"Engine\Shader" -I"Engine ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:/Users/Terry/...fault manifests:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

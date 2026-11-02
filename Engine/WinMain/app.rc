@@ -1,3 +1,6 @@
 #include <windows.h>
 
 CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "app.manifest"
+
+// Application icon (exe file icon / shortcut icon), from logo\logo.ico.
+1 ICON "..\..\logo\logo.ico"

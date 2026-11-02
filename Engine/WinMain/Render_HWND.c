@@ -9,6 +9,7 @@
 #include "Render_HWND.h"
 #include "Debug_Panel.h"
 #include "..\Shader\Render_Bootstrap.hpp"
+#include "..\Shader\Decode_pictures.hpp"
 
 static MSG msg;
 int frame_counter;                       //  Record the frames passing.
@@ -113,6 +114,14 @@ HWND RegisterWindow(HINSTANCE hInstance, int nCmdShow)
     // Enable the modern dark title bar (DWM immersive dark mode).
     BOOL dark = TRUE;
     DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &dark, sizeof(dark));
+
+    // Window icon: title bar + taskbar, from the app's embedded icon resource.
+    HICON hicon = LoadIconW(GetModuleHandleW(NULL), MAKEINTRESOURCEW(1));
+    if (hicon)
+    {
+        SendMessageW(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hicon);
+        SendMessageW(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hicon);
+    }
 
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);

@@ -29,10 +29,10 @@
 #include <wchar.h>
 #include "Debug_Panel.h"
 
-#define ID_INPUT   1000
-#define ID_RUN     1001
-#define ID_OUTPUT  1002
-#define ID_CANCEL  1003
+#define ID_INPUT 1000
+#define ID_RUN 1001
+#define ID_OUTPUT 1002
+#define ID_CANCEL 1003
 
 #define TIMER_ID 1
 #define MAX_SEG 4096
@@ -42,29 +42,29 @@
 #define SCF_SEL 0x0001
 #endif
 
-static HWND g_panel;    // The Debug window itself.
-static HWND g_input;    // Command input line.
-static HWND g_output;   // Command output area (RichEdit, colour capable).
-static HWND g_run;      // Run button.
-static WNDPROC g_orig_input;  // Original edit procedure (for subclassing).
-static HFONT g_ui_font;       // Segoe UI font for a modern look.
+static HWND g_panel;         // The Debug window itself.
+static HWND g_input;         // Command input line.
+static HWND g_output;        // Command output area (RichEdit, colour capable).
+static HWND g_run;           // Run button.
+static WNDPROC g_orig_input; // Original edit procedure (for subclassing).
+static HFONT g_ui_font;      // Segoe UI font for a modern look.
 
-static HWND g_prog_win;   // Separate progress window while a command runs.
-static HWND g_progress;   // Progress bar inside the progress window.
-static HWND g_cancel;     // Cancel button inside the progress window.
-static HWND g_hint;       // Status label inside the progress window.
+static HWND g_prog_win; // Separate progress window while a command runs.
+static HWND g_progress; // Progress bar inside the progress window.
+static HWND g_cancel;   // Cancel button inside the progress window.
+static HWND g_hint;     // Status label inside the progress window.
 
 static HANDLE g_proc = NULL;   // Running child process.
 static BOOL g_running = FALSE; // A command is currently in progress.
 static int g_progress_pos = 0; // Progress bar position (0..100).
 
-static void create_progress_window(void);   // Forward declaration.
+static void create_progress_window(void); // Forward declaration.
 
 // A coloured span of the plain output text.
 typedef struct
 {
-    int start;     // Start character index in the plain text.
-    int len;       // Number of characters.
+    int start; // Start character index in the plain text.
+    int len;   // Number of characters.
     COLORREF color;
 } seg_t;
 
@@ -72,11 +72,11 @@ typedef struct
 static COLORREF ansi_color(int num)
 {
     static const COLORREF normal[8] = {
-        RGB(0,0,0), RGB(128,0,0), RGB(0,128,0), RGB(128,128,0),
-        RGB(0,0,128), RGB(128,0,128), RGB(0,128,128), RGB(192,192,192)};
+        RGB(0, 0, 0), RGB(128, 0, 0), RGB(0, 128, 0), RGB(128, 128, 0),
+        RGB(0, 0, 128), RGB(128, 0, 128), RGB(0, 128, 128), RGB(192, 192, 192)};
     static const COLORREF bright[8] = {
-        RGB(128,128,128), RGB(255,0,0), RGB(0,255,0), RGB(255,255,0),
-        RGB(0,0,255), RGB(255,0,255), RGB(0,255,255), RGB(255,255,255)};
+        RGB(128, 128, 128), RGB(255, 0, 0), RGB(0, 255, 0), RGB(255, 255, 0),
+        RGB(0, 0, 255), RGB(255, 0, 255), RGB(0, 255, 255), RGB(255, 255, 255)};
     if (num >= 90 && num <= 97)
         return bright[num - 90];
     return normal[num - 30];
@@ -86,15 +86,15 @@ static COLORREF ansi_color(int num)
 static int parse_ansi(const wchar_t *src, int slen,
                       wchar_t *plain, seg_t *segs, int max_segs)
 {
-    int pc = 0;          // Plain text length.
+    int pc = 0; // Plain text length.
     int seg_start = 0;
-    COLORREF seg_color = RGB(0,0,0);
+    COLORREF seg_color = RGB(0, 0, 0);
     int seg_count = 0;
     int i = 0;
 
     while (i < slen)
     {
-        if (src[i] == 0x1B)   // ESC starts a colour sequence.
+        if (src[i] == 0x1B) // ESC starts a colour sequence.
         {
             // Flush the current segment.
             if (pc > seg_start && seg_count < max_segs)
@@ -104,7 +104,7 @@ static int parse_ansi(const wchar_t *src, int slen,
                 segs[seg_count].color = seg_color;
                 seg_count++;
             }
-            i += 2;           // Skip ESC[.
+            i += 2; // Skip ESC[.
 
             COLORREF color = seg_color;
             while (i < slen && src[i] != L'm')
@@ -119,7 +119,7 @@ static int parse_ansi(const wchar_t *src, int slen,
                 if (have)
                 {
                     if (num == 0)
-                        color = RGB(0,0,0);
+                        color = RGB(0, 0, 0);
                     else if (num >= 30 && num <= 37)
                         color = ansi_color(num);
                     else if (num >= 90 && num <= 97)
@@ -130,7 +130,7 @@ static int parse_ansi(const wchar_t *src, int slen,
                     i++;
             }
             if (i < slen)
-                i++;          // Skip 'm'.
+                i++; // Skip 'm'.
 
             seg_color = color;
             seg_start = pc;
@@ -193,7 +193,7 @@ static void show_log(void)
     CHARFORMAT2W cf = {0};
     cf.cbSize = sizeof(cf);
     cf.dwMask = CFM_FACE | CFM_SIZE;
-    cf.yHeight = 200;   // 10 point.
+    cf.yHeight = 200; // 10 point.
     wcsncpy(cf.szFaceName, L"Times New Roman", LF_FACESIZE - 1);
     cf.szFaceName[LF_FACESIZE - 1] = L'\0';
     SendMessageW(g_output, EM_SETSEL, 0, -1);
@@ -241,7 +241,7 @@ static void finish_command(int cancelled)
 // Start a command in a child process without blocking the message loop.
 static void run_command(HWND panel)
 {
-    if (g_running)          // A command is already running.
+    if (g_running) // A command is already running.
         return;
 
     char cmd[512];
@@ -251,7 +251,7 @@ static void run_command(HWND panel)
 
     // Pop the progress window up FIRST, so it appears the moment
     // Run/Enter is pressed, before the command even starts.
-    g_progress_pos = 30;  // Start with a clearly visible chunk so it is not empty.
+    g_progress_pos = 30; // Start with a clearly visible chunk so it is not empty.
     create_progress_window();
     SendMessage(g_progress, PBM_SETPOS, g_progress_pos, 0);
 
@@ -350,7 +350,7 @@ static void create_progress_window(void)
         registered = 1;
     }
 
-    int pw = 460;   // Bigger window so the Cancel button fits inside.
+    int pw = 460; // Bigger window so the Cancel button fits inside.
     int ph = 160;
     int sw = GetSystemMetrics(SM_CXSCREEN);
     int sh = GetSystemMetrics(SM_CYSCREEN);
@@ -359,6 +359,14 @@ static void create_progress_window(void)
                                  WS_OVERLAPPEDWINDOW,
                                  (sw - pw) / 2, (sh - ph) / 2, pw, ph,
                                  NULL, NULL, GetModuleHandleW(NULL), NULL);
+
+    // Title bar icon from the app's embedded icon resource.
+    HICON appicon = LoadIconW(GetModuleHandleW(NULL), MAKEINTRESOURCEW(1));
+    if (appicon)
+    {
+        SendMessageW(g_prog_win, WM_SETICON, ICON_SMALL, (LPARAM)appicon);
+        SendMessageW(g_prog_win, WM_SETICON, ICON_BIG, (LPARAM)appicon);
+    }
 
     // Status label: says "Waiting" until the bar starts advancing.
     HWND hint = CreateWindowExW(0, L"STATIC", L"Waiting Please......",
@@ -384,8 +392,8 @@ static void create_progress_window(void)
     SendMessageW(g_cancel, WM_SETFONT, (WPARAM)g_ui_font, TRUE);
 
     ShowWindow(g_prog_win, SW_SHOW);
-    UpdateWindow(g_prog_win);          // Force it to paint immediately.
-    SetForegroundWindow(g_prog_win);   // Bring it to the front.
+    UpdateWindow(g_prog_win);        // Force it to paint immediately.
+    SetForegroundWindow(g_prog_win); // Bring it to the front.
 }
 
 static LRESULT CALLBACK PanelProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -400,10 +408,10 @@ static LRESULT CALLBACK PanelProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
     case WM_TIMER:
         if (wParam == TIMER_ID && g_running)
         {
-            DWORD st = WaitForSingleObject(g_proc, 0);   // Non-blocking poll.
+            DWORD st = WaitForSingleObject(g_proc, 0); // Non-blocking poll.
             if (st == WAIT_OBJECT_0)
             {
-                SendMessage(g_progress, PBM_SETPOS, 100, 0);  // Fill the bar.
+                SendMessage(g_progress, PBM_SETPOS, 100, 0); // Fill the bar.
                 finish_command(0);
             }
             else
@@ -472,20 +480,28 @@ HWND create_debug_panel(HWND parent)
     int x = mr.right + 10;
     int y = mr.top;
 
-    int pw = 520;  // Debug window width.
-    int ph = 420;  // Debug window height.
+    int pw = 520; // Debug window width.
+    int ph = 420; // Debug window height.
 
     HWND panel = CreateWindowExW(0, CLASS_NAME, L"Debug",
-                                WS_OVERLAPPEDWINDOW,
-                                x, y, pw, ph, parent, NULL, wc.hInstance, NULL);
+                                 WS_OVERLAPPEDWINDOW,
+                                 x, y, pw, ph, parent, NULL, wc.hInstance, NULL);
     if (!panel)
         return NULL;
     g_panel = panel;
 
+    // Title bar icon from the app's embedded icon resource.
+    HICON appicon = LoadIconW(GetModuleHandleW(NULL), MAKEINTRESOURCEW(1));
+    if (appicon)
+    {
+        SendMessageW(panel, WM_SETICON, ICON_SMALL, (LPARAM)appicon);
+        SendMessageW(panel, WM_SETICON, ICON_BIG, (LPARAM)appicon);
+    }
+
     // Command input line (top, larger).
     g_input = CreateWindowExW(0, L"EDIT", L"g++ -Wall ...",
-                             WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL,
-                             4, 4, pw - 8, 34, panel, (HMENU)ID_INPUT, wc.hInstance, NULL);
+                              WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL,
+                              4, 4, pw - 8, 34, panel, (HMENU)ID_INPUT, wc.hInstance, NULL);
     SendMessageW(g_input, WM_SETFONT, (WPARAM)g_ui_font, TRUE);
 
     // Subclass it so pressing Enter runs the command.
@@ -504,7 +520,7 @@ HWND create_debug_panel(HWND parent)
     // Output area (multi-line, read-only, RichEdit for colours).
     g_output = CreateWindowExW(0, L"RichEdit20W", NULL,
                                WS_CHILD | WS_VISIBLE | WS_BORDER | ES_MULTILINE |
-                               ES_READONLY | WS_VSCROLL | WS_HSCROLL,
+                                   ES_READONLY | WS_VSCROLL | WS_HSCROLL,
                                4, 78, pw - 8, ph - 82, panel, (HMENU)ID_OUTPUT, wc.hInstance, NULL);
 
     ShowWindow(panel, SW_SHOW);

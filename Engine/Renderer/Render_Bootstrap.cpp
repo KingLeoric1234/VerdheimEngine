@@ -157,6 +157,8 @@ int d3d12_bootstrap(HWND hwnd, int w, int h)
         return 405;
     if (!gate_vbuffer()) // Render_Pipeline.cpp
         return 406;
+    if (!gate_cbuffer()) // Render_Pipeline.cpp
+        return 408;
     if (!gate_fence())
         return 407;
     return 0;

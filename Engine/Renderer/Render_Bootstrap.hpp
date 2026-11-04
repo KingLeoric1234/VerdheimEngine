@@ -38,5 +38,6 @@ void d3d12_frame(void);                        // Per-frame rendering, in Render
 // Render-pipeline gates, called from d3d12_bootstrap after the core gates.
 bool gate_pipeline(void);
 bool gate_vbuffer(void);
+bool gate_cbuffer(void);
 
 #endif // RENDERBOOTSTRAP_H
